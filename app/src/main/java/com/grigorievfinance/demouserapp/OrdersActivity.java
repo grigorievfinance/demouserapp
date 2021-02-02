@@ -18,42 +18,60 @@ import com.grigorievfinance.demouserapp.model.User;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersActivity extends ListActivity {
 
-    private ArrayAdapter<Order> adapter;
+    private ArrayAdapter<String> descriptionAdapter;
+
+    private List<Order> orders = null;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_orders);
-
 
         Intent intent = getIntent();
         User user = (User)intent.getSerializableExtra("user");
 
-        List<Order> orders = OrderController.getAll(user);
+        orders = OrderController.getAll();
+
         if (orders != null) {
-            listOfOrders(orders);
+            listOfDescriptions(getDescriptions(orders));
         } else {
             displayError();
         }
     }
 
-    private void listOfOrders(List<Order> orders) {
-        adapter = new ArrayAdapter<Order>(this, R.layout.support_simple_spinner_dropdown_item, orders);
-        setListAdapter(adapter);
+    private void listOfDescriptions(List<String> descriptions) {
+        descriptionAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, descriptions);
+        setListAdapter(descriptionAdapter);
+    }
+
+    private List<String> getDescriptions(List<Order> orders) {
+        List<String> strings = new ArrayList<>();
+        for (Order order : orders) {
+            strings.add(order.getDescription());
+        }
+        return strings;
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Toast.makeText(getApplicationContext(), "You choose " + (position + 1) + " order", Toast.LENGTH_SHORT).show();
+        Order order = orders.get(position);
+        Toast.makeText(getApplicationContext(), "You choose " + order.getDescription(), Toast.LENGTH_SHORT).show();
+        openDetail(order);
     }
 
     private void displayError() {
+        Toast.makeText(getApplicationContext(), "List of orders is null", Toast.LENGTH_LONG).show();
+    }
 
+    private void openDetail(Order order) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("order", order);
+        startActivity(intent);
     }
 }

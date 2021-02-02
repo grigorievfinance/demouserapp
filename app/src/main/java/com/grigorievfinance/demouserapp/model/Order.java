@@ -1,10 +1,11 @@
 package com.grigorievfinance.demouserapp.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Order {
+public class Order implements Serializable {
 
     private Integer id;
 

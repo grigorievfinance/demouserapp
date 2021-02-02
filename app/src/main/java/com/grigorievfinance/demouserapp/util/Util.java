@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import com.grigorievfinance.demouserapp.model.Order;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
@@ -45,6 +46,20 @@ public class Util {
         BigDecimal price = BigDecimal.valueOf(jsonObject.getInt("price"));
         LocalDate deadLine = LocalDate.parse(jsonObject.getString("deadline"));
         boolean excess = jsonObject.optBoolean("excess");
+
         return new Order(id, dateTime, description, price, deadLine, excess);
+    }
+
+    public static JSONObject fromOrder(Order order) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("id", order.getId());
+        jsonObject.put("dateTime", order.getDateTime().toString());
+        jsonObject.put("description", order.getDescription());
+        jsonObject.put("price", order.getPrice());
+        jsonObject.put("deadLine", order.getDeadline().toString());
+        jsonObject.optBoolean("excess", order.isExcess());
+
+        return jsonObject;
     }
 }

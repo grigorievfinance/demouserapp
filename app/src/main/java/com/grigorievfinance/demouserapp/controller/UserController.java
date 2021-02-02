@@ -10,6 +10,8 @@ import static com.grigorievfinance.demouserapp.util.Util.basicAuth;
 
 public class UserController {
 
+    private static User logginUser;
+
     public static User login(String username, String password) {
         String url = "https://soft-maker.com/rest/profile/";
 
@@ -22,9 +24,19 @@ public class UserController {
         }
 
         if (response.isSuccess()) {
-            return new User(username, password, true);
+            setUser(new User(username, password, true));
+            return getLogginUser();
         } else {
-            return new User(username, password, false);
+            setUser(new User(username, password, false));
+            return getLogginUser();
         }
+    }
+
+    private static void setUser(User user) {
+        logginUser = user;
+    }
+
+    public static User getLogginUser() {
+        return logginUser;
     }
 }
