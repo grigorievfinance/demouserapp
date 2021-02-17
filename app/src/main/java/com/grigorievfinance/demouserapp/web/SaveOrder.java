@@ -11,19 +11,20 @@ import com.grigorievfinance.demouserapp.util.Util;
 
 import org.json.JSONException;
 
-public class SaveOrder extends AsyncTask<Order, Void, ANResponse> {
+public class SaveOrder extends AsyncTask<Void, Void, ANResponse> {
 
     private final String url;
     private final String basicAuth;
+    private final Order order;
 
-    public SaveOrder(String url, String basicAuth) {
+    public SaveOrder(String url, String basicAuth, Order order) {
         this.url = url;
         this.basicAuth = basicAuth;
+        this.order = order;
     }
 
     @Override
-    protected ANResponse doInBackground(Order... orders) {
-        Order order = orders[0];
+    protected ANResponse doInBackground(Void... voids) {
         try {
             return makeRequest(url, basicAuth, order);
         } catch (JSONException e) {
@@ -36,10 +37,11 @@ public class SaveOrder extends AsyncTask<Order, Void, ANResponse> {
         ANRequest request = AndroidNetworking.put(url)
                 .addHeaders("Authorization", basicAuth)
                 .addHeaders("Content-Type", "application/json")
-//                .addJSONObjectBody(Util.fromOrder(order))
-                .addApplicationJsonBody(order)
+                .addJSONObjectBody(Util.fromOrder(order))
+//                .addApplicationJsonBody(order)
                 .setPriority(Priority.MEDIUM)
                 .build();
-        return request.executeForObject(Order.class);
+//        return request.executeForObject(Order.class);
+        return request.executeForJSONObject();
     }
 }

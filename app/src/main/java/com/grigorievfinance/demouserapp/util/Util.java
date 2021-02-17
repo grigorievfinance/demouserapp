@@ -6,6 +6,7 @@ import android.util.Base64;
 import androidx.annotation.RequiresApi;
 
 import com.grigorievfinance.demouserapp.model.Order;
+import com.grigorievfinance.demouserapp.model.OrderTo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,21 +26,21 @@ public class Util {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static List<Order> orderList(JSONArray jsonArray) {
-        List<Order> orders = new ArrayList<>();
+    public static List<OrderTo> orderList(JSONArray jsonArray) {
+        List<OrderTo> orderTos = new ArrayList<>();
         for (int i = 0; i<jsonArray.length(); i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                orders.add(toOrder(jsonObject));
+                orderTos.add(fromJson(jsonObject));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return orders;
+        return orderTos;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private static Order toOrder(JSONObject jsonObject) throws Exception {
+    private static OrderTo fromJson(JSONObject jsonObject) throws Exception {
         Integer id = jsonObject.getInt("id");
         LocalDateTime dateTime = LocalDateTime.parse(jsonObject.getString("dateTime"));
         String description = jsonObject.getString("description");
@@ -47,7 +48,7 @@ public class Util {
         LocalDate deadLine = LocalDate.parse(jsonObject.getString("deadline"));
         boolean excess = jsonObject.optBoolean("excess");
 
-        return new Order(id, dateTime, description, price, deadLine, excess);
+        return new OrderTo(id, dateTime, description, price, deadLine, excess);
     }
 
     public static JSONObject fromOrder(Order order) throws JSONException {
@@ -57,9 +58,14 @@ public class Util {
         jsonObject.put("dateTime", order.getDateTime().toString());
         jsonObject.put("description", order.getDescription());
         jsonObject.put("price", order.getPrice());
-        jsonObject.put("deadLine", order.getDeadline().toString());
-        jsonObject.optBoolean("excess", order.isExcess());
+        jsonObject.put("deadline", order.getDeadline().toString());
+
+        System.out.println(jsonObject);
 
         return jsonObject;
+    }
+
+    public static Order toOrder(OrderTo orderTo) {
+        return new Order(orderTo.getId(), orderTo.getDateTime(), orderTo.getDescription(), orderTo.getPrice(), orderTo.getDeadline());
     }
 }

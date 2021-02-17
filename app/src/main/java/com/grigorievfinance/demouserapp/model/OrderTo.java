@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Order implements Serializable {
+public class OrderTo implements Serializable {
 
     private Integer id;
 
@@ -17,15 +17,18 @@ public class Order implements Serializable {
 
     private LocalDate deadline;
 
-    public Order() {
+    private boolean excess;
+
+    public OrderTo() {
     }
 
-    public Order(Integer id, LocalDateTime dateTime, String description, BigDecimal price, LocalDate deadline) {
+    public OrderTo(Integer id, LocalDateTime dateTime, String description, BigDecimal price, LocalDate deadline, boolean excess) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.price = price;
         this.deadline = deadline;
+        this.excess = excess;
     }
 
     public Integer getId() {
@@ -68,6 +71,14 @@ public class Order implements Serializable {
         this.deadline = deadline;
     }
 
+    public boolean isExcess() {
+        return excess;
+    }
+
+    public void setExcess(boolean excess) {
+        this.excess = excess;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -76,6 +87,7 @@ public class Order implements Serializable {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", deadline=" + deadline +
+                ", excess=" + excess +
                 '}';
     }
 }

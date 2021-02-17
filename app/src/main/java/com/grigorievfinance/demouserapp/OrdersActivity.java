@@ -8,15 +8,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.grigorievfinance.demouserapp.controller.OrderController;
-import com.grigorievfinance.demouserapp.model.Order;
+import com.grigorievfinance.demouserapp.model.OrderTo;
 import com.grigorievfinance.demouserapp.model.User;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ public class OrdersActivity extends ListActivity {
 
     private ArrayAdapter<String> descriptionAdapter;
 
-    private List<Order> orders = null;
+    private List<OrderTo> orderTos = null;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -35,10 +32,10 @@ public class OrdersActivity extends ListActivity {
         Intent intent = getIntent();
         User user = (User)intent.getSerializableExtra("user");
 
-        orders = OrderController.getAll();
+        orderTos = OrderController.getAll();
 
-        if (orders != null) {
-            listOfDescriptions(getDescriptions(orders));
+        if (orderTos != null) {
+            listOfDescriptions(getDescriptions(orderTos));
         } else {
             displayError();
         }
@@ -49,10 +46,10 @@ public class OrdersActivity extends ListActivity {
         setListAdapter(descriptionAdapter);
     }
 
-    private List<String> getDescriptions(List<Order> orders) {
+    private List<String> getDescriptions(List<OrderTo> orderTos) {
         List<String> strings = new ArrayList<>();
-        for (Order order : orders) {
-            strings.add(order.getDescription());
+        for (OrderTo orderTo : orderTos) {
+            strings.add(orderTo.getDescription());
         }
         return strings;
     }
@@ -60,18 +57,18 @@ public class OrdersActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Order order = orders.get(position);
-        Toast.makeText(getApplicationContext(), "You choose " + order.getDescription(), Toast.LENGTH_SHORT).show();
-        openDetail(order);
+        OrderTo orderTo = orderTos.get(position);
+        Toast.makeText(getApplicationContext(), "You choose " + orderTo.getDescription(), Toast.LENGTH_SHORT).show();
+        openDetail(orderTo);
     }
 
     private void displayError() {
         Toast.makeText(getApplicationContext(), "List of orders is null", Toast.LENGTH_LONG).show();
     }
 
-    private void openDetail(Order order) {
+    private void openDetail(OrderTo orderTo) {
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("order", order);
+        intent.putExtra("order", orderTo);
         startActivity(intent);
     }
 }

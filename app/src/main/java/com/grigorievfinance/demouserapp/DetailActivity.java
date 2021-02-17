@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.grigorievfinance.demouserapp.controller.OrderController;
-import com.grigorievfinance.demouserapp.model.Order;
+import com.grigorievfinance.demouserapp.model.OrderTo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +23,7 @@ import static com.grigorievfinance.demouserapp.util.Validation.*;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private Order order;
+    private OrderTo orderTo;
     private EditText orderIdEd;
     private EditText orderDateEd;
     private EditText orderDescEd;
@@ -32,6 +32,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private Button buttonSave;
     private Button buttonBack;
+    private Button buttonDelete;
+    private Button buttonCreate;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -40,10 +42,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        order = (Order)intent.getSerializableExtra("order");
+        orderTo = (OrderTo)intent.getSerializableExtra("order");
 
         View view = findViewById(R.id.background);
-        if (order.isExcess()) {
+        if (orderTo.isExcess()) {
             view.setBackgroundColor(Color.MAGENTA);
         } else {
             view.setBackgroundColor(Color.CYAN);
@@ -57,12 +59,14 @@ public class DetailActivity extends AppCompatActivity {
 
         buttonSave = findViewById(R.id.button_save);
         buttonBack = findViewById(R.id.button_back);
+        buttonDelete = findViewById(R.id.button_delete);
+        buttonCreate = findViewById(R.id.button_create);
 
-        String orderId = order.getId().toString();
-        String orderDate = order.getDateTime().format(DATE_TIME_FORMATTER);
-        String orderDesc = order.getDescription();
-        String orderPrice = order.getPrice().toString();
-        String orderDLine = order.getDeadline().toString();
+        String orderId = orderTo.getId().toString();
+        String orderDate = orderTo.getDateTime().format(DATE_TIME_FORMATTER);
+        String orderDesc = orderTo.getDescription();
+        String orderPrice = orderTo.getPrice().toString();
+        String orderDLine = orderTo.getDeadline().toString();
 
         orderIdEd.setText(orderId);
         orderDateEd.setText(orderDate);
@@ -87,6 +91,20 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 change();
+            }
+        });
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete(orderId);
+            }
+        });
+
+        buttonCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                create();
             }
         });
     }
@@ -128,12 +146,12 @@ public class DetailActivity extends AppCompatActivity {
         LocalDate deadLine = LocalDate.parse(dline);
 
         if (validation(order_id, dateTime, desc, order_price, deadLine)) {
-            order.setId(order_id);
-            order.setDateTime(dateTime);
-            order.setDescription(desc);
-            order.setPrice(order_price);
-            order.setDeadline(deadLine);
-            if (OrderController.save(order)) {
+            orderTo.setId(order_id);
+            orderTo.setDateTime(dateTime);
+            orderTo.setDescription(desc);
+            orderTo.setPrice(order_price);
+            orderTo.setDeadline(deadLine);
+            if (OrderController.save(orderTo)) {
                 Toast.makeText(getApplicationContext(), "Saved successful", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_LONG).show();
@@ -141,6 +159,20 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Not valid data", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void delete(String id) {
+        int order_id = Integer.parseInt(id);
+        if (OrderController.delete(order_id)) {
+            Toast.makeText(getApplicationContext(), "Deleted successful", Toast.LENGTH_SHORT).show();
+            back();
+        } else {
+            Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void create() {
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
