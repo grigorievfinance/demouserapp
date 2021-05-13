@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Validation {
 
-    private static final LocalDateTime MAX_DATE = LocalDateTime.now().plusDays(1);
+    private static final LocalDateTime MAX_DATE = LocalDateTime.now().plusYears(1);
     private static final LocalDateTime MIN_DATE = LocalDateTime.of(LocalDate.ofYearDay(2020, 01), LocalTime.MIN);
     private static final BigDecimal MAX_PRICE = BigDecimal.valueOf(999999);
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";

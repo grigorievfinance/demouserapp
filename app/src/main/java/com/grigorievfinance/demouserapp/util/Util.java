@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.grigorievfinance.demouserapp.util.Validation.DATE_TIME_FORMATTER;
+
 public class Util {
 
     public static String basicAuth(String username, String password) {
@@ -51,16 +53,15 @@ public class Util {
         return new OrderTo(id, dateTime, description, price, deadLine, excess);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static JSONObject fromOrder(Order order) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put("id", order.getId());
-        jsonObject.put("dateTime", order.getDateTime().toString());
+        jsonObject.put("dateTime", order.getDateTime());
         jsonObject.put("description", order.getDescription());
         jsonObject.put("price", order.getPrice());
         jsonObject.put("deadline", order.getDeadline().toString());
-
-        System.out.println(jsonObject);
 
         return jsonObject;
     }

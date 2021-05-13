@@ -17,9 +17,6 @@ public class Order implements Serializable {
 
     private LocalDate deadline;
 
-    public Order() {
-    }
-
     public Order(Integer id, LocalDateTime dateTime, String description, BigDecimal price, LocalDate deadline) {
         this.id = id;
         this.dateTime = dateTime;

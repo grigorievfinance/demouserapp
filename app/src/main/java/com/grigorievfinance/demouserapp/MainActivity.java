@@ -1,8 +1,10 @@
 package com.grigorievfinance.demouserapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +17,13 @@ import com.grigorievfinance.demouserapp.controller.UserController;
 import com.grigorievfinance.demouserapp.model.User;
 import com.grigorievfinance.demouserapp.util.Validation;
 
+import java.time.LocalDateTime;
+
+import static com.grigorievfinance.demouserapp.util.Validation.DATE_TIME_FORMATTER;
+
 public class MainActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         final String password = passwordEditText.getText().toString();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 final String username = usernameEditText.getText().toString();

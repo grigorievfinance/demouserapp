@@ -13,11 +13,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.grigorievfinance.demouserapp.controller.OrderController;
+import com.grigorievfinance.demouserapp.model.Order;
 import com.grigorievfinance.demouserapp.model.OrderTo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.grigorievfinance.demouserapp.util.Validation.*;
 
@@ -153,6 +155,12 @@ public class DetailActivity extends AppCompatActivity {
             orderTo.setDeadline(deadLine);
             if (OrderController.save(orderTo)) {
                 Toast.makeText(getApplicationContext(), "Saved successful", Toast.LENGTH_SHORT).show();
+                orderIdEd.setEnabled(false);
+                orderDateEd.setEnabled(false);
+                orderDescEd.setEnabled(false);
+                orderPriceEd.setEnabled(false);
+                orderDeadLineEd.setEnabled(false);
+                buttonSave.setText("Change");
             } else {
                 Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_LONG).show();
             }
@@ -171,12 +179,54 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void create() {
+        View view = findViewById(R.id.background);
+        view.setBackgroundColor(Color.WHITE);
+        buttonSave.setText("Save");
+        orderIdEd.getText().clear();
+        orderIdEd.setEnabled(false);
+        LocalDateTime dateTime = LocalDateTime.now();
+        orderDateEd.setText(dateTime.toString());
+        orderDateEd.setEnabled(false);
+        orderDescEd.getText().clear();
+        orderDescEd.setEnabled(true);
+        orderPriceEd.getText().clear();
+        orderPriceEd.setEnabled(true);
+        orderDeadLineEd.getText().clear();
+        orderDeadLineEd.setEnabled(true);
 
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String description = orderDescEd.getText().toString();
+                BigDecimal price = BigDecimal.valueOf(Double.parseDouble(orderPriceEd.getText().toString()));
+                LocalDate deadLine = LocalDate.parse(orderDeadLineEd.getText().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+
+                if (newValidation(dateTime, description, price, deadLine)) {
+                    Order order = new Order(null, dateTime, description, price, deadLine);
+                    if (OrderController.saveNew(order)) {
+                        Toast.makeText(getApplicationContext(), "Created successful", Toast.LENGTH_SHORT).show();
+                        back();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "An create error occurred", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "An validation error occurred", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean validation(int id, LocalDateTime dateTime, String description, BigDecimal price, LocalDate deadLine) {
         return isIdValid(id) && isDateTimeValid(dateTime) && isDescriptionValid(description) && isPriceValid(price) && isDeadLineValid(deadLine);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean newValidation(LocalDateTime dateTime, String description, BigDecimal price, LocalDate deadLine) {
+        return isDateTimeValid(dateTime) && isDescriptionValid(description) && isPriceValid(price) && isDeadLineValid(deadLine);
     }
 }
