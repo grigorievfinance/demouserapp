@@ -7,12 +7,12 @@ import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
 
-public class Request extends AsyncTask<Void, Void, ANResponse> {
+public class Read extends AsyncTask<Void, Void, ANResponse> {
 
     private final String url;
     private final String basicAuth;
 
-    public Request(String url, String basicAuth) {
+    public Read(String url, String basicAuth) {
         this.url = url;
         this.basicAuth = basicAuth;
     }

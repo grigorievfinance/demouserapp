@@ -7,30 +7,27 @@ import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
 
-public class DeleteOrder extends AsyncTask<Void, Void, ANResponse> {
-
+public class GetAll extends AsyncTask<Void, Void, ANResponse> {
     private final String url;
     private final String basicAuth;
 
-    public DeleteOrder(String url, String basicAuth) {
+    public GetAll(String url, String basicAuth) {
         this.url = url;
         this.basicAuth = basicAuth;
     }
 
+    @Override
     protected ANResponse doInBackground(Void... voids) {
-        try {
-            return makeRequest(url,basicAuth);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getResponse(url, basicAuth);
     }
 
-    public static synchronized ANResponse makeRequest(final String url, final String basicAuth) {
-        ANRequest request = AndroidNetworking.delete(url)
+    public static synchronized ANResponse getResponse(final String url, final String basicAuth) {
+        ANRequest request = AndroidNetworking.get(url)
                 .addHeaders("Authorization", basicAuth)
+                .addHeaders("Content-Type", "application/json")
                 .setPriority(Priority.LOW)
                 .build();
-        return request.executeForOkHttpResponse();
+
+        return request.executeForJSONArray();
     }
 }

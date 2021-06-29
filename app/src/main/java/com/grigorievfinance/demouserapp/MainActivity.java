@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.grigorievfinance.demouserapp.controller.UserController;
+import com.grigorievfinance.demouserapp.model.Balance;
 import com.grigorievfinance.demouserapp.model.User;
 import com.grigorievfinance.demouserapp.util.Validation;
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openNewActivities(User user) {
-        Intent intent = new Intent(this, OrdersActivity.class);
+        Intent intent = new Intent(this, BalanceActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }

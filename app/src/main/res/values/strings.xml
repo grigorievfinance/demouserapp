@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">DemoUserApp</string>
 
-    <string name="prompt_email">Email</string>
+    <string name="prompt_email">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -10,14 +10,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
-    <string name="order_id">Id</string>
-    <string name="order_dateTime">DateTime</string>
-    <string name="order_description">Description</string>
-    <string name="order_price">Price</string>
-    <string name="order_deadLine">DeadLine</string>
-    <string name="button_back">Back</string>
-    <string name="button_change">Change</string>
-    <string name="button_save">Save</string>
-    <string name="button_delete">Delete</string>
-    <string name="button_create">New</string>
+    <string name="balance">Balance:</string>
+    <string name="trades">Trades:</string>
+    <string name="positive">Positive:</string>
 </resources>

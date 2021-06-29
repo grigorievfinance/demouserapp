@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.androidnetworking.common.ANResponse;
 import com.grigorievfinance.demouserapp.model.User;
-import com.grigorievfinance.demouserapp.web.Request;
+import com.grigorievfinance.demouserapp.web.Read;
 
 import static com.grigorievfinance.demouserapp.util.Util.basicAuth;
 
@@ -13,10 +13,10 @@ public class UserController {
     private static User logginUser;
 
     public static User login(String username, String password) {
-        String url = "https://soft-maker.com/rest/profile/";
+        String url = "https://soft-maker.com/binance/balance";
 
         ANResponse response = null;
-        AsyncTask<Void, Void, ANResponse> responseAsyncTask = new Request(url, basicAuth(username, password)).execute();
+        AsyncTask<Void, Void, ANResponse> responseAsyncTask = new Read(url, basicAuth(username, password)).execute();
         try {
             response = responseAsyncTask.get();
         } catch (Exception e) {
